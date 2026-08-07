@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jungwon Kong — Seoul National University</title>
+  <meta name="description" content="Academic homepage of Jungwon Kong, Seoul National University.">
+
+  <style>
+    :root {
+      --bg: #ffffff;
+      --card: #ffffff;
+      --ink: #2d3733;
+      --muted: #6b7a73;
+      --teal: #157a6e;
+      --teal-dark: #0e5c53;
+      --sage: #e9f2ee;
+      --line: #e3e9e6;
+      --gold: #b98a2f;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; scroll-padding-top: 70px; }
+
+    body {
+      font-family: "Pretendard", "Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans KR", "Segoe UI", Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      line-height: 1.65;
+      font-size: 16.5px;
+    }
+
+    h1, h2, h3 { font-family: inherit; font-weight: 700; }
+
+    a { color: var(--teal); text-decoration: none; }
+    a:hover { color: var(--teal-dark); text-decoration: underline; }
+
+    nav {
+      position: sticky; top: 0; z-index: 10;
+      background: rgba(255, 255, 255, 0.94);
+      backdrop-filter: blur(6px);
+      border-bottom: 1px solid var(--line);
+    }
+    .nav-inner {
+      max-width: 860px; margin: 0 auto; padding: 0.7rem 1.2rem;
+      display: flex; align-items: center; gap: 0.45rem;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      white-space: nowrap;
+      scrollbar-width: none;
+    }
+    .nav-inner::-webkit-scrollbar { display: none; }
+    .nav-name {
+      font-size: 1.02rem; font-weight: 700; color: var(--ink);
+      margin-right: auto; padding-right: 0.6rem; flex-shrink: 0;
+    }
+    nav a.nav-link {
+      color: var(--muted); font-size: 0.87rem; flex-shrink: 0;
+      padding: 0.15rem 0.5rem; border-radius: 999px;
+      transition: color 0.15s ease, background 0.15s ease;
+    }
+    nav a.nav-link:hover { color: var(--teal); text-decoration: none; }
+    nav a.nav-link.active {
+      color: var(--teal-dark); font-weight: 700; background: var(--sage);
+      text-decoration: none;
+    }
+
+    header.hero {
+      max-width: 860px; margin: 0 auto; padding: 3.2rem 1.2rem 2.2rem;
+      display: flex; flex-direction: column; align-items: center;
+      text-align: center; gap: 1.4rem;
+    }
+    .portrait-wrap { position: relative; }
+    .portrait {
+      width: 168px; height: 168px; border-radius: 50%;
+      object-fit: cover;
+      border: 4px solid var(--sage);
+      box-shadow: 0 4px 18px rgba(21, 122, 110, 0.15);
+      display: block;
+    }
+    .portrait-fallback {
+      width: 168px; height: 168px; border-radius: 50%;
+      display: none; align-items: center; justify-content: center;
+      background: var(--sage); color: var(--teal-dark);
+      font-size: 3rem; font-weight: 700;
+      border: 4px solid var(--sage);
+    }
+    .hero-text h1 { font-size: 2.1rem; margin-bottom: 0.2rem; }
+    .hero-text .role { color: var(--teal); font-size: 1.02rem; margin-bottom: 0.7rem; }
+    .hero-text .intro { max-width: 600px; margin: 0 auto; color: var(--ink); text-align: left; }
+
+    .contact-row { display: flex; gap: 0.55rem; flex-wrap: wrap; justify-content: center; }
+    .contact-row a, .contact-row button, .cv-menu summary {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      padding: 0.38rem 0.85rem; border-radius: 999px;
+      background: var(--sage); color: var(--teal-dark);
+      font-size: 0.88rem; transition: background 0.15s ease;
+      border: none; cursor: pointer; font-family: inherit;
+    }
+    .contact-row a:hover, .contact-row button:hover, .cv-menu summary:hover {
+      background: var(--teal); color: #fff; text-decoration: none;
+    }
+    .contact-row svg { width: 15px; height: 15px; fill: currentColor; }
+
+    #copy-toast {
+      position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%);
+      background: var(--teal-dark); color: #fff;
+      padding: 0.55rem 1.1rem; border-radius: 999px; font-size: 0.88rem;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.18);
+      opacity: 0; pointer-events: none; transition: opacity 0.25s ease;
+      z-index: 50;
+    }
+    #copy-toast.show { opacity: 1; }
+
+    .cv-menu { position: relative; }
+    .cv-menu summary { list-style: none; }
+    .cv-menu summary::-webkit-details-marker { display: none; }
+    .cv-options {
+      position: absolute; top: calc(100% + 6px); left: 50%; transform: translateX(-50%);
+      background: #fff; border: 1px solid var(--line); border-radius: 10px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.10);
+      display: flex; flex-direction: column; min-width: 175px;
+      overflow: hidden; z-index: 20;
+    }
+    .cv-options a {
+      background: none; border-radius: 0; padding: 0.55rem 0.9rem;
+      justify-content: flex-start; font-size: 0.87rem; color: var(--ink);
+    }
+    .cv-options a:hover { background: var(--sage); color: var(--teal-dark); }
+
+    main { max-width: 860px; margin: 0 auto; padding: 0 1.2rem 4rem; }
+
+    section { margin-top: 2.6rem; }
+    section h2 {
+      font-size: 1.45rem; color: var(--teal-dark);
+      padding-bottom: 0.45rem; margin-bottom: 1.1rem;
+      border-bottom: 2px solid var(--sage);
+    }
+
+    .card {
+      background: var(--card); border: 1px solid var(--line);
+      border-radius: 12px; padding: 1.1rem 1.3rem; margin-bottom: 0.85rem;
+      box-shadow: 0 1px 4px rgba(45, 55, 51, 0.04);
+    }
+
+    .item-title { font-weight: 600; }
+    .item-sub { color: var(--muted); font-size: 0.93rem; }
+    .year { color: var(--teal); font-size: 0.9rem; font-weight: 600; white-space: nowrap; }
+
+    .row { display: flex; justify-content: space-between; gap: 1rem; align-items: baseline; }
+
+    .edu-card { display: flex; gap: 1rem; align-items: center; }
+    .edu-logo {
+      width: 46px; height: 46px; object-fit: contain; flex-shrink: 0;
+      border-radius: 8px;
+    }
+    .edu-body { flex: 1; }
+
+    .tag-group-label {
+      font-size: 0.88rem; font-weight: 700; color: var(--muted);
+      text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 0.45rem;
+    }
+    .tags { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+    .tags span {
+      background: var(--card); border: 1px solid var(--line);
+      border-left: 3px solid var(--teal);
+      border-radius: 8px; padding: 0.35rem 0.8rem; font-size: 0.92rem;
+    }
+
+    .pub-card {
+      position: relative;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      box-shadow: 0 1px 4px rgba(45, 55, 51, 0.04);
+      padding: 1.1rem 1.3rem;
+      padding-right: 9.5rem;
+      margin-bottom: 0.85rem;
+    }
+    .pub-venue { font-style: italic; color: var(--muted); }
+
+    .status {
+      position: absolute; top: 0.75rem; right: 0.85rem;
+      padding: 0.14rem 0.62rem; border-radius: 999px;
+      font-size: 0.76rem; font-weight: 700; white-space: nowrap;
+    }
+    .status.published { background: #e2f3d8; color: #47701f; }
+    .status.review    { background: #faf0c8; color: #8a6d1a; }
+    .status.wip       { background: #fbe2e9; color: #a8496b; }
+
+    .award-badge {
+      display: inline-block; margin-left: 0.4rem; padding: 0.05rem 0.5rem;
+      border-radius: 6px; background: #f6ead2; color: var(--gold); font-size: 0.78rem;
+    }
+
+    .view-paper {
+      display: inline-flex; align-items: center; gap: 0.28rem;
+      margin-top: 0.55rem; font-size: 0.87rem; font-weight: 600;
+    }
+    .view-paper::after { content: "↗"; font-size: 0.8rem; }
+
+    @media (max-width: 560px) {
+      .pub-card { padding-right: 1.2rem; padding-top: 2.3rem; }
+    }
+
+    ul.timeline { list-style: none; }
+    ul.timeline li {
+      display: flex; gap: 1.1rem; padding: 0.5rem 0;
+      border-bottom: 1px dashed var(--line);
+    }
+    ul.timeline .year { min-width: 3.4rem; }
+
+    .ref-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 0.85rem; }
+    .copy-email { cursor: pointer; }
+
+    footer {
+      border-top: 1px solid var(--line);
+      text-align: center; color: var(--muted);
+      font-size: 0.85rem; padding: 1.6rem 1rem 2.2rem;
+    }
+
+    @media (max-width: 640px) {
+      .row { flex-direction: column; gap: 0.15rem; }
+      .edu-card .row { align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div class="nav-inner">
+      <span class="nav-name">Jungwon Kong</span>
+      <a class="nav-link" href="#research">Research</a>
+      <a class="nav-link" href="#education">Education</a>
+      <a class="nav-link" href="#publications">Publications</a>
+      <a class="nav-link" href="#presentations">Presentations</a>
+      <a class="nav-link" href="#awards">Projects &amp; Awards</a>
+      <a class="nav-link" href="#patents">Patents</a>
+      <a class="nav-link" href="#skills">Skills</a>
+      <a class="nav-link" href="#references">References</a>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <div class="portrait-wrap">
+      <img class="portrait" src="profile_kong.jpg" alt="Portrait of Jungwon Kong"
+           onerror="this.style.display='none'; document.getElementById('pf').style.display='flex';">
+      <div class="portrait-fallback" id="pf">JK</div>
+    </div>
+
+    <div class="hero-text">
+      <h1>Jungwon Kong</h1>
+      <p class="role">Ph.D. Candidate, Technology Management, Economics and Policy Program, Seoul National University</p>
+      <p class="intro">
+        I am a Ph.D. candidate in the Technology Management, Economics and Policy Program
+        at Seoul National University. My research explores technology management and
+        innovation in creative industries, with a particular focus on how artificial
+        intelligence reshapes creativity and knowledge flows in the music industry.
+        Methodologically, I draw on computational social science, econometric analysis,
+        patent analysis, and natural language processing.
+      </p>
+    </div>
+
+    <div class="contact-row">
+      <button id="email-btn" data-email="georgekong41@snu.ac.kr" aria-label="Copy email address">
+        <svg viewBox="0 0 24 24"><path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 4-8 5-8-5V6l8 5 8-5v2z"/></svg>
+        <span id="email-btn-label">Email</span>
+      </button>
+
+      <details class="cv-menu" id="cv-menu">
+        <summary aria-label="Curriculum Vitae">
+          <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm-1 7V3.5L18.5 9H13z"/></svg>
+          CV
+        </summary>
+        <div class="cv-options">
+          <a href="cv_kong.pdf" target="_blank" rel="noopener">Open in new tab</a>
+          <a href="cv_kong.pdf" download="Jungwon_Kong_CV.pdf">Download PDF</a>
+        </div>
+      </details>
+
+      <a href="https://www.linkedin.com/in/jungwonkong/" target="_blank" aria-label="LinkedIn">
+        <svg viewBox="0 0 24 24"><path d="M19 3A2 2 0 0 1 21 5v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14zM8.3 18.3v-7.9H5.9v7.9h2.4zM7.1 9.3a1.4 1.4 0 1 0 0-2.8 1.4 1.4 0 0 0 0 2.8zm11.2 9v-4.5c0-2.2-1.2-3.2-2.8-3.2-1.3 0-1.9.7-2.2 1.2v-1.4h-2.4l.1 7.9h2.4v-4.4c0-1.1.8-1.6 1.5-1.6.8 0 1.3.5 1.3 1.7v4.3h2.1z"/></svg>
+        LinkedIn
+      </a>
+      <a href="https://scholar.google.com/citations?user=DEGmApoAAAAJ&amp;hl=ko&amp;oi=ao" target="_blank" aria-label="Google Scholar">
+        <svg viewBox="0 0 24 24"><path d="M12 3 1 9l11 6 9-4.9V17h2V9L12 3zM5 13.2V17c0 1.9 3.1 4 7 4s7-2.1 7-4v-3.8l-7 3.8-7-3.8z"/></svg>
+        Scholar
+      </a>
+      <a href="https://orcid.org/0009-0006-7477-9346" target="_blank" aria-label="ORCID">
+        <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zM8.2 17H6.7V9.2h1.5V17zm-.75-8.9a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm3.2 1.1h3c2.9 0 4.2 2 4.2 3.9 0 2-1.6 3.9-4.2 3.9h-3V9.2zm1.5 1.4v5h1.5c2 0 2.7-1.4 2.7-2.5 0-1.3-.9-2.5-2.8-2.5h-1.4z"/></svg>
+        ORCID
+      </a>
+    </div>
+  </header>
+
+  <div id="copy-toast">Email address copied to clipboard ✓</div>
+
+  <main>
+
+    <section id="research">
+      <h2>Research Interests</h2>
+      <div class="tag-group-label">Topics</div>
+      <div class="tags">
+        <span>Technology Management</span>
+        <span>Innovation</span>
+        <span>Creative Industries</span>
+        <span>Creativity</span>
+        <span>Knowledge Spillovers</span>
+      </div>
+      <div class="tag-group-label" style="margin-top:1rem;">Methodologies</div>
+      <div class="tags">
+        <span>Computational Social Science</span>
+        <span>Econometric Analysis</span>
+        <span>Patent Analysis</span>
+        <span>NLP &amp; Text Analysis</span>
+        <span>Business Analysis</span>
+        <span>Music Information Retrieval</span>
+      </div>
+    </section>
+
+    <section id="education">
+      <h2>Education</h2>
+      <div class="card edu-card">
+        <img class="edu-logo" src="logo-snu.png" alt="" onerror="this.style.display='none'">
+        <div class="edu-body">
+          <div class="row">
+            <div>
+              <div class="item-title">Ph.D. in Engineering, Seoul National University</div>
+              <div class="item-sub">Technology Management, Economics and Policy Program (Digitalogy Lab)<br>
+                Integrated major: Smart City Global Convergence · Advisor: Prof. Junseok Hwang</div>
+            </div>
+            <div class="year">2023 – Present</div>
+          </div>
+        </div>
+      </div>
+      <div class="card edu-card">
+        <img class="edu-logo" src="logo-snu.png" alt="" onerror="this.style.display='none'">
+        <div class="edu-body">
+          <div class="row">
+            <div>
+              <div class="item-title">M.S. in Engineering, Seoul National University</div>
+              <div class="item-sub">Technology Management, Economics and Policy Program · Integrated major: Smart City Global Convergence<br>
+                Thesis: "Understanding Smart City Development Strategy: A Comparison between Siheung City and Florida NeoCity"</div>
+            </div>
+            <div class="year">2021 – 2023</div>
+          </div>
+        </div>
+      </div>
+      <div class="card edu-card">
+        <img class="edu-logo" src="logo-hult.png" alt="" onerror="this.style.display='none'">
+        <div class="edu-body">
+          <div class="row">
+            <div>
+              <div class="item-title">M.S. in International Business, Hult International Business School</div>
+              <div class="item-sub">Cambridge, MA, USA</div>
+            </div>
+            <div class="year">2018 – 2019</div>
+          </div>
+        </div>
+      </div>
+      <div class="card edu-card">
+        <img class="edu-logo" src="logo-berklee.png" alt="" onerror="this.style.display='none'">
+        <div class="edu-body">
+          <div class="row">
+            <div>
+              <div class="item-title">B.M. in Music Business and Management, Berklee College of Music</div>
+              <div class="item-sub">Boston, MA, USA</div>
+            </div>
+            <div class="year">2013 – 2018</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="publications">
+      <h2>Publications</h2>
+
+      <div class="pub-card">
+        <span class="status published">Published</span>
+        <strong>Kong, Jungwon</strong>, Hwang, J., and Kim, H. (2025).
+        "Building Smarter Cities Together: Government-to-Government Partnerships in the
+        Development of Smart Cities." <span class="pub-venue">Cities</span> 156: 105532.
+        <br><a class="view-paper" href="https://doi.org/10.1016/j.cities.2024.105532" target="_blank" rel="noopener">View paper</a>
+      </div>
+
+      <div class="pub-card">
+        <span class="status review">Under Review</span>
+        <strong>Kong, Jungwon</strong>, Hwang, J., and Kim, H.
+        "Can AI Expand Human Musical Creativity? Acoustic and Semantic Evidence from Popular Music."
+      </div>
+
+      <div class="pub-card">
+        <span class="status wip">Work in Progress</span>
+        <strong>Kong, Jungwon</strong>, Hwang, J., and Maliphol, S.
+        "Artificial Intelligence in a Creative Industry: Technological Impact and Knowledge Flows
+        in the Music Industry."
+      </div>
+
+      <div class="pub-card">
+        <span class="status wip">Work in Progress</span>
+        <strong>Kong, Jungwon</strong>, Hwang, J., and Maliphol, S.
+        "Recombinant Human Capital: How AI Redefines the Occupational Map of the Music Industry."
+      </div>
+    </section>
+
+    <section id="presentations">
+      <h2>Presentations &amp; Conferences</h2>
+      <ul class="timeline">
+        <li>
+          <span class="year">2025</span>
+          <span>"From Taste to Trajectory: Understanding Cultural Signals through Genre Popularity
+            in the Music Industry," <em>Korea Society of Innovation &amp; TEMEP Conference</em>, South Korea.</span>
+        </li>
+        <li>
+          <span class="year">2025</span>
+          <span>"Entrepreneurship and Branding: The Role of Patents and Technological Innovation
+            in Creative Entrepreneurship," <em>Anyang University</em> — Invited talk.</span>
+        </li>
+        <li>
+          <span class="year">2021</span>
+          <span>"How Accordance between City Brand and Individual Personality in Smart City Promotion
+            Affects Willingness to Live," <em>Urban Design Institute of Korea</em>, South Korea.</span>
+        </li>
+      </ul>
+    </section>
+
+    <section id="awards">
+      <h2>Projects &amp; Awards</h2>
+      <div class="tag-group-label">Research Projects</div>
+      <ul class="timeline">
+        <li>
+          <span class="year">2024</span>
+          <span><strong>BK21 International Joint Research Project</strong>, Florida, USA —
+            proposed a community-based digital education model to reduce digital inequality
+            among elderly populations.</span>
+        </li>
+        <li>
+          <span class="year">2023</span>
+          <span><strong>Manufacturing Servitization Research</strong>, Gachon University —
+            case-study review of manufacturing servitization and industrial transformation strategies.</span>
+        </li>
+        <li>
+          <span class="year">2021–23</span>
+          <span><strong>K-Lab Cooperation with Laos Support</strong>, NIPA —
+            ICT capacity-building research and problem-solving-based education programs
+            supporting digital innovation in Laos.</span>
+        </li>
+        <li>
+          <span class="year">2022</span>
+          <span><strong>Smart City Innovation Ecosystem in NeoCity</strong>, Osceola County Government,
+            Florida, USA — field research and commissioner interviews on NeoCity's smart city identity.</span>
+        </li>
+        <li>
+          <span class="year">2022</span>
+          <span><strong>Community-Based Education Model with Metaverse</strong>, Seoul National University —
+            designed and evaluated a metaverse-enabled education framework integrating NFT technologies
+            and entrepreneurship education.</span>
+        </li>
+        <li>
+          <span class="year">2021–22</span>
+          <span><strong>SRS Autopilot Commercial Concept Proof with 4D Image Radar</strong>,
+            Seoul National University — technology commercialization pathways for autonomous mobility
+            in Siheung City.</span>
+        </li>
+      </ul>
+
+      <div class="tag-group-label" style="margin-top:1.4rem;">Awards &amp; Scholarships</div>
+      <ul class="timeline">
+        <li>
+          <span class="year">2023</span>
+          <span><strong>BK21 Scholar Student (Ph.D.)</strong>, Seoul National University.</span>
+        </li>
+        <li>
+          <span class="year">2021</span>
+          <span><strong>BK21 Scholar Student (Master's)</strong>, Seoul National University.</span>
+        </li>
+        <li>
+          <span class="year">2019</span>
+          <span><strong>Future Leader Scholarship</strong>, Hult International Business School.</span>
+        </li>
+        <li>
+          <span class="year">2018</span>
+          <span><strong>Scholar Student &amp; Dean's List</strong>, Berklee College of Music.</span>
+        </li>
+      </ul>
+    </section>
+
+    <section id="patents">
+      <h2>Patents</h2>
+      <div class="card">
+        <div class="row">
+          <div>
+            <div class="item-title">"Method for Providing Smart Healthcare to Lower Stress Index"</div>
+            <div class="item-sub">Korean patent application No. 10-2022004-4915 ·
+              Inventors: Kong, J., Hwang, W., Than, S., and Hwang, J.<br>
+              A smart healthcare method that monitors heart rate via wearable devices to detect
+              stress levels and automatically delivers personalized music therapy to reduce stress
+              and improve sleep.</div>
+          </div>
+          <div class="year">Filed 2023</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="skills">
+      <h2>Skills</h2>
+      <div class="tag-group-label">Programming &amp; Data Analysis</div>
+      <div class="tags">
+        <span>Python</span><span>R</span><span>Stata</span>
+      </div>
+      <div class="tag-group-label" style="margin-top:1rem;">Research Tools (Network Analysis)</div>
+      <div class="tags">
+        <span>Gephi</span><span>VOSviewer</span>
+      </div>
+      <div class="tag-group-label" style="margin-top:1rem;">Web Technologies</div>
+      <div class="tags">
+        <span>HTML</span><span>CSS</span><span>JavaScript</span>
+      </div>
+      <div class="tag-group-label" style="margin-top:1rem;">Software</div>
+      <div class="tags">
+        <span>QuickBooks</span>
+      </div>
+      <div class="tag-group-label" style="margin-top:1rem;">Languages</div>
+      <div class="tags">
+        <span>Korean</span><span>English</span>
+      </div>
+    </section>
+
+    <section id="references">
+      <h2>References</h2>
+      <div class="ref-grid">
+        <div class="card">
+          <div class="item-title">Dr. Junseok Hwang</div>
+          <div class="item-sub">Professor, Technology Management, Economics and Policy Program,
+            Seoul National University<br>
+            <a class="copy-email" data-email="junhwang@snu.ac.kr" title="Click to copy">junhwang@snu.ac.kr</a></div>
+        </div>
+        <div class="card">
+          <div class="item-title">Dr. Sira Maliphol</div>
+          <div class="item-sub">Professor, Technology Management, Economics and Policy Program,
+            Seoul National University<br>
+            <a class="copy-email" data-email="smaliphol@snu.ac.kr" title="Click to copy">smaliphol@snu.ac.kr</a></div>
+        </div>
+        <div class="card">
+          <div class="item-title">Dr. Hongbum Kim</div>
+          <div class="item-sub">Assistant Professor, College of Business, Gachon University<br>
+            <a class="copy-email" data-email="hkim@gachon.ac.kr" title="Click to copy">hkim@gachon.ac.kr</a></div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    © 2026 Jungwon Kong · Last updated August 2026
+  </footer>
+
+  <script>
+    const emailBtn = document.getElementById('email-btn');
+    const emailLabel = document.getElementById('email-btn-label');
+    const toast = document.getElementById('copy-toast');
+
+    async function copyEmail(email) {
+      try {
+        await navigator.clipboard.writeText(email);
+        toast.textContent = email + ' copied to clipboard ✓';
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 2200);
+        return true;
+      } catch (e) {
+        window.location.href = 'mailto:' + email;
+        return false;
+      }
+    }
+
+    emailBtn.addEventListener('click', async () => {
+      if (await copyEmail(emailBtn.dataset.email)) {
+        emailLabel.textContent = 'Copied ✓';
+        setTimeout(() => { emailLabel.textContent = 'Email'; }, 2200);
+      }
+    });
+
+    document.querySelectorAll('.copy-email').forEach(el => {
+      el.addEventListener('click', () => copyEmail(el.dataset.email));
+    });
+
+    const cvMenu = document.getElementById('cv-menu');
+    document.addEventListener('click', (e) => {
+      if (!cvMenu.contains(e.target)) cvMenu.removeAttribute('open');
+    });
+
+    const navLinks = document.querySelectorAll('nav a.nav-link');
+    const sections = [...navLinks].map(a => document.querySelector(a.getAttribute('href')));
+
+    let navClickLock = 0;
+    navLinks.forEach(a => a.addEventListener('click', () => {
+      navLinks.forEach(x => x.classList.remove('active'));
+      a.classList.add('active');
+      navClickLock = Date.now() + 1000;
+    }));
+
+    function highlightNav() {
+      if (Date.now() < navClickLock) return;
+      let current = -1;
+      sections.forEach((sec, i) => {
+        if (sec && sec.getBoundingClientRect().top <= 90) current = i;
+      });
+      if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 4) {
+        current = sections.length - 1;
+      }
+      navLinks.forEach((a, i) => a.classList.toggle('active', i === current));
+    }
+    window.addEventListener('scroll', highlightNav, { passive: true });
+    highlightNav();
+  </script>
+
+</body>
+</html>
